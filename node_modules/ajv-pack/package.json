@@ -1,0 +1,49 @@
+{
+  "name": "ajv-pack",
+  "version": "0.3.1",
+  "description": "Produces a compact module exporting JSON-schema validation functions compiled by Ajv",
+  "main": "index.js",
+  "files": [
+    "lib/",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/compile-dots.js",
+    "eslint": "eslint index.js lib/*.js spec/*.js",
+    "test": "npm run eslint && npm run build && npm run test-cov",
+    "test-debug": "mocha spec/*.spec.js --debug-brk -R spec",
+    "test-spec": "mocha spec/*.spec.js -R spec",
+    "test-cov": "istanbul cover -x '**/spec/**' node_modules/mocha/bin/_mocha -- spec/*.spec.js -R spec",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epoberezkin/ajv-pack.git"
+  },
+  "keywords": [
+    "Ajv",
+    "JSON-Schema"
+  ],
+  "author": "Evgeny Poberezkin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/epoberezkin/ajv-pack/issues"
+  },
+  "homepage": "https://github.com/epoberezkin/ajv-pack#readme",
+  "dependencies": {
+    "js-beautify": "^1.6.4",
+    "require-from-string": "^1.2.0"
+  },
+  "devDependencies": {
+    "ajv": "^5.0.0",
+    "ajv-keywords": "^2.0.0",
+    "co": "^4.6.0",
+    "coveralls": "^2.11.14",
+    "dot": "^1.0.3",
+    "eslint": "^3.6.0",
+    "glob": "^7.1.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.0.2",
+    "pre-commit": "^1.1.3"
+  }
+}
