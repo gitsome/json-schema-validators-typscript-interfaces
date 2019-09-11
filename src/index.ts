@@ -18,32 +18,32 @@ const commandLineArgs = yargs
   .help('help')
   .argv
 
-const jsonSchemaSourceDirectory = path.resolve(__dirname, commandLineArgs.source);
+const jsonSchemaSourceDirectory = path.resolve(process.cwd(), commandLineArgs.source);
 
 let interfaceTarget;
 if (commandLineArgs.i) {
-  interfaceTarget = path.resolve(__dirname, commandLineArgs.source);
+  interfaceTarget = path.resolve(process.cwd(), commandLineArgs.source);
 } else {
   interfaceTarget = path.join(jsonSchemaSourceDirectory, '..', 'json-schema-interfaces');
 }
 
 let validatorTarget;
 if (commandLineArgs.v) {
-  validatorTarget = path.resolve(__dirname, commandLineArgs.source);
+  validatorTarget = path.resolve(process.cwd(), commandLineArgs.source);
 } else {
   validatorTarget = path.join(jsonSchemaSourceDirectory, '..', 'json-schema-validators');
 }
 
 let patterns = {};
 if (commandLineArgs.patterns) {
-  patterns = require(path.resolve(__dirname, commandLineArgs.patterns));
+  patterns = require(path.resolve(process.cwd(), commandLineArgs.patterns));
 }
 
 const SOURCE_JSON_SCHEMA_DIR = jsonSchemaSourceDirectory;
 const TARGET_TYPESCRIPT_INTERFACE_DIR = interfaceTarget;
 const TARGET_VALIDATORS_DIR = validatorTarget;
 
-const TEMPORARY_DIR = path.resolve(__dirname, './json-schema-transformation-tmp');
+const TEMPORARY_DIR = path.resolve(process.cwd(), './json-schema-transformation-tmp');
 const TEMPORARY_SCHEMA_DIR = path.join(TEMPORARY_DIR, 'schema');
 
 console.log("JSON SCHEMA LOCATION:", SOURCE_JSON_SCHEMA_DIR);
