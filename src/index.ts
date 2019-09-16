@@ -6,13 +6,21 @@ import { compileFromFile } from 'json-schema-to-typescript';
 import getAllFiles from './scripts/get-all-files';
 import generateJsonSchemaValidators from './scripts/generate-json-schema-validators.js';
 
+interface Options {
+  source: string;
+}
+
 const commandLineArgs = yargs
+  .string('source')
   .alias('s', 'source')
   .describe('s', 'the directory for your json schema files')
+  .string('interface-target')
   .alias('i', 'interface-target')
   .describe('i', 'the output location for TypeScript interfaces')
+  .string('validator-target')
   .alias('v', 'validator-target')
   .describe('v', 'the output location for json schema validators')
+  .string('patterns')
   .alias('p', 'patterns')
   .describe('p', 'the location of a regex patterns module (optional)')
   .demandOption(['source'], 'The source (s) parameter is required.')
@@ -35,7 +43,7 @@ if (commandLineArgs.v) {
   validatorTarget = path.join(jsonSchemaSourceDirectory, '..', 'json-schema-validators');
 }
 
-let patterns = {};
+let patterns: {[key: string]: JSON} = {};
 if (commandLineArgs.patterns) {
   patterns = require(path.resolve(process.cwd(), commandLineArgs.patterns));
 }
@@ -55,7 +63,7 @@ console.log("REGEX PATTERNS:", patterns);
 const REGEX_IS_SCHEMA_FILE = /\.(json)$/i;
 const REGEX_PATTERN_TEMPLATE = /\$\{\s*PATTERN\s*([^\s]*)\s*\}/g;
 
-const updateSchemaFile = (filePath) => {
+const updateSchemaFile = (filePath: string) => {
 
   // read the file synchronously
   const rawFile = fs.readFileSync(filePath, 'utf8');
@@ -66,7 +74,7 @@ const updateSchemaFile = (filePath) => {
       throw new Error(`updateSchemaFile:RegexPattern - pattern not found '${matchText}'`);
     }
 
-    // remove start and end / for JSON SCHEMA purposes and also escape characers to make regex expression valid in JSON
+    // remove start and end / for JSON SCHEMA purposes and also escape characters to make regex expression valid in JSON
     return patterns[matchText].toString()
       .replace(/^\//, '')
       .replace(/\/$/, '')
@@ -107,9 +115,7 @@ getAllFiles(TEMPORARY_SCHEMA_DIR).then((fileInfoList) => {
 // run typescript to json schema
 }).then((schemaFileList) => {
 
-  const allSchemaPromises = [];
-
-  schemaFileList.forEach((schemaFilePath) => {
+  const allSchemaPromises = schemaFileList.map((schemaFilePath) => {
 
     const schemaPromise = compileFromFile(schemaFilePath, {}).then((ts) => {
 
@@ -123,7 +129,7 @@ getAllFiles(TEMPORARY_SCHEMA_DIR).then((fileInfoList) => {
       return fs.writeFileSync(targetTypeScriptFilePath, ts);
     });
 
-    allSchemaPromises.push(schemaPromise);
+    return schemaPromise;
   });
 
   return Promise.all(allSchemaPromises);

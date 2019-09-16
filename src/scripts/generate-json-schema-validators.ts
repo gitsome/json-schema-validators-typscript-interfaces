@@ -31,11 +31,11 @@ const generateJsonSchemaValidators = (ROOT_SCHEMA_PATH: string, VALIDATOR_TARGET
       const schemaValidatorCode = AjvPack(ajv, ajv.getSchema(schema.$id));
 
       const relativeSchemaFilePath = path.relative(ROOT_SCHEMA_PATH, schema._filePath).replace(/.json$/, '.js');
-      const targetScemaValidtorFilePath = path.resolve(VALIDATOR_TARGET_PATH, relativeSchemaFilePath);
-      const targetScemaValidtorFolderPath = path.dirname(targetScemaValidtorFilePath);
+      const targetSchemaValidtorFilePath = path.resolve(VALIDATOR_TARGET_PATH, relativeSchemaFilePath);
+      const targetSchemaValidtorFolderPath = path.dirname(targetSchemaValidtorFilePath);
 
-      fs.mkdirSync(targetScemaValidtorFolderPath, { recursive: true });
-      fs.writeFileSync(targetScemaValidtorFilePath, schemaValidatorCode);
+      fs.mkdirSync(targetSchemaValidtorFolderPath, { recursive: true });
+      fs.writeFileSync(targetSchemaValidtorFilePath, schemaValidatorCode);
     });
 
   });

@@ -1,6 +1,6 @@
 import readdirp from 'readdirp';
 
-const getAllFiles = (rootPath) => {
+const getAllFiles = (rootPath: string) => {
   return readdirp.promise(rootPath);
 };
 

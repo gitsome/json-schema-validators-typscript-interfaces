@@ -11,12 +11,16 @@ const json_schema_to_typescript_1 = require("json-schema-to-typescript");
 const get_all_files_1 = __importDefault(require("./scripts/get-all-files"));
 const generate_json_schema_validators_js_1 = __importDefault(require("./scripts/generate-json-schema-validators.js"));
 const commandLineArgs = yargs_1.default
+    .string('source')
     .alias('s', 'source')
     .describe('s', 'the directory for your json schema files')
+    .string('interface-target')
     .alias('i', 'interface-target')
     .describe('i', 'the output location for TypeScript interfaces')
+    .string('validator-target')
     .alias('v', 'validator-target')
     .describe('v', 'the output location for json schema validators')
+    .string('patterns')
     .alias('p', 'patterns')
     .describe('p', 'the location of a regex patterns module (optional)')
     .demandOption(['source'], 'The source (s) parameter is required.')
@@ -59,7 +63,7 @@ const updateSchemaFile = (filePath) => {
         if (!patterns[matchText]) {
             throw new Error(`updateSchemaFile:RegexPattern - pattern not found '${matchText}'`);
         }
-        // remove start and end / for JSON SCHEMA purposes and also escape characers to make regex expression valid in JSON
+        // remove start and end / for JSON SCHEMA purposes and also escape characters to make regex expression valid in JSON
         return patterns[matchText].toString()
             .replace(/^\//, '')
             .replace(/\/$/, '')
@@ -88,8 +92,7 @@ get_all_files_1.default(TEMPORARY_SCHEMA_DIR).then((fileInfoList) => {
     return schemaFileList;
     // run typescript to json schema
 }).then((schemaFileList) => {
-    const allSchemaPromises = [];
-    schemaFileList.forEach((schemaFilePath) => {
+    const allSchemaPromises = schemaFileList.map((schemaFilePath) => {
         const schemaPromise = json_schema_to_typescript_1.compileFromFile(schemaFilePath, {}).then((ts) => {
             const relativeTypeScriptFilePath = path_1.default.relative(TEMPORARY_SCHEMA_DIR, schemaFilePath).replace(/.json$/, '.ts');
             const targetTypeScriptFilePath = path_1.default.resolve(TARGET_TYPESCRIPT_INTERFACE_DIR, relativeTypeScriptFilePath);
@@ -98,7 +101,7 @@ get_all_files_1.default(TEMPORARY_SCHEMA_DIR).then((fileInfoList) => {
             fs_extra_1.default.mkdirSync(targetTypeScriptFileFolderPath, { recursive: true });
             return fs_extra_1.default.writeFileSync(targetTypeScriptFilePath, ts);
         });
-        allSchemaPromises.push(schemaPromise);
+        return schemaPromise;
     });
     return Promise.all(allSchemaPromises);
 }).then(() => {
