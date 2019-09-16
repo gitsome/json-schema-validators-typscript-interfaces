@@ -17,7 +17,7 @@ yarn add json-schema-validators-typescript-interfaces -D
 From the root of your project, you can invoke the module directly
 
 ```bash
-node node_modules/json-schema-validators-typescript-interfaces/dist/index.js -s <path to your json schema source>
+json-schema-validators-typescript-interfaces -s <path to your json schema source>
 ```
 
 ## Build Integration
