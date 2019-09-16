@@ -6,6 +6,9 @@
   "files": [
     "dist/index.js"
   ],
+  "bin": {
+    "json-schema-validators-typescript-interfaces": "./dist/index.js"
+  },
   "repository": "https://github.com/gitsome/json-schema-validators-typescript-interfaces.git",
   "author": "John David Martin <johndavidfive@gmail.com>",
   "license": "MIT",
@@ -21,15 +24,15 @@
   "dependencies": {
     "ajv": "^6.10.2",
     "ajv-pack": "^0.3.1",
+    "fs-extra": "^8.1.0",
+    "json-schema-to-typescript": "^7.1.0",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",
-    "fs-extra": "^8.1.0",
     "husky": "^3.0.5",
     "jasmine": "^3.4.0",
     "jasmine-terminal-reporter": "^1.0.3",
-    "json-schema-to-typescript": "^7.1.0",
     "lint-staged": "^9.2.1",
     "readdirp": "^3.1.2",
     "ts-node": "^8.3.0",
