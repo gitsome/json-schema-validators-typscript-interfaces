@@ -4,7 +4,7 @@
   "description": "Accepts a directory full of json-schema files and produces associated validators and TypeScript interfaces. Great for validating server side with NodeJS and improving TypeScript client side dev.",
   "main": "dist/index.js",
   "files": [
-    "dist/index.js"
+    "dist"
   ],
   "bin": {
     "json-schema-validators-typescript-interfaces": "./dist/index.js"
@@ -16,7 +16,9 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "ts-node node_modules/jasmine/bin/jasmine"
+    "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "lint": "eslint src --ext ts",
+    "format": "eslint src --ext ts --fix"
   },
   "engines": {
     "node": ">=8"
@@ -26,6 +28,7 @@
     "ajv-pack": "^0.3.1",
     "fs-extra": "^8.1.0",
     "json-schema-to-typescript": "^7.1.0",
+    "readdirp": "^3.1.2",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
@@ -33,21 +36,32 @@
     "@types/fs-extra": "^8.0.0",
     "@types/jest": "^24.0.18",
     "@types/yargs": "^13.0.2",
+    "@typescript-eslint/eslint-plugin": "^2.3.0",
+    "@typescript-eslint/parser": "^2.1.0",
+    "eslint": "^6.4.0",
+    "eslint-config-prettier": "^6.3.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "husky": "^3.0.5",
     "jasmine": "^3.4.0",
     "jasmine-terminal-reporter": "^1.0.3",
     "lint-staged": "^9.2.1",
-    "readdirp": "^3.1.2",
+    "prettier": "^1.18.2",
     "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
     "typescript": "^3.5.3"
   },
   "resolutions": {
     "ajv": "^6.10.2"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "lint-staged": {
-    "*.{ts, js}": [
-      "tslint --fix",
+    "src/**/*.{ts, js}": [
+      "eslint --ext ts --fix",
       "git add"
     ]
   }
