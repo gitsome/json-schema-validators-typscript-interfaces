@@ -29,6 +29,7 @@
     "yargs": "^14.0.0"
   },
   "devDependencies": {
+    "@types/ajv-pack": "^0.3.0",
     "@types/fs-extra": "^8.0.0",
     "@types/jest": "^24.0.18",
     "@types/yargs": "^13.0.2",
@@ -40,6 +41,9 @@
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
     "typescript": "^3.5.3"
+  },
+  "resolutions": {
+    "ajv": "^6.10.2"
   },
   "lint-staged": {
     "*.{ts, js}": [
