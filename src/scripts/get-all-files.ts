@@ -1,7 +1,7 @@
-import readdirp from 'readdirp';
+import { promise } from "readdirp";
 
 const getAllFiles = (rootPath: string) => {
-  return readdirp.promise(rootPath);
+  return promise(rootPath);
 };
 
 export default getAllFiles;
