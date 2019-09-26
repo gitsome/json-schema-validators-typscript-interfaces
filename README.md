@@ -6,6 +6,12 @@ This allows developers to define their data models that require validation once 
 
 One good use case for this module is serverless NodeJS development. The developer has json schema validators that check requests, and data models on the backend, and has TypeScript interfaces for data models that can be used both in Lambda code and front-end code.
 
+## Quick Start
+
+```bash
+npx json-schema-validators-typescript-interfaces -s <path to your json schema source>
+```
+
 ## Installation
 
 ```bash
@@ -88,7 +94,7 @@ Here is how these could be templated inside of your json schema:
 In order to tell this library to use your regex module, simply provide the path via the `--patterns` or `-p` parameter
 
 ```bash
-node node_modules/json-schema-validators-typescript-interfaces/dist/index.js -s <path to your json schema source> -p <path to your regex patterns module>
+json-schema-validators-typescript-interfaces -s <path to your json schema source> -p <path to your regex patterns module>
 ```
 
 ## Custom Interface and Validator Target Directories
@@ -98,5 +104,5 @@ By default the library will place validator and interface artifacts next to wher
 You can override either of them by providing command line arguments. For details see the help:
 
 ```bash
-node node_modules/json-schema-validators-typescript-interfaces/dist/index.js -h
+json-schema-validators-typescript-interfaces -h
 ```
