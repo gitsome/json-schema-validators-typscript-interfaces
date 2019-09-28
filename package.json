@@ -2,12 +2,12 @@
   "name": "json-schema-validators-typescript-interfaces",
   "version": "1.0.0",
   "description": "Accepts a directory full of json-schema files and produces associated validators and TypeScript interfaces. Great for validating server side with NodeJS and improving TypeScript client side dev.",
-  "main": "dist/index.js",
+  "main": "dist/api.js",
   "files": [
     "dist"
   ],
   "bin": {
-    "json-schema-validators-typescript-interfaces": "./dist/index.js"
+    "json-schema-validators-typescript-interfaces": "./dist/cli.js"
   },
   "repository": "https://github.com/gitsome/json-schema-validators-typescript-interfaces.git",
   "author": "John David Martin <johndavidfive@gmail.com>",
@@ -16,7 +16,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "test": "jest src",
     "lint": "eslint src --ext ts",
     "format": "eslint src --ext ts --fix"
   },
@@ -44,10 +44,10 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "husky": "^3.0.5",
-    "jasmine": "^3.4.0",
-    "jasmine-terminal-reporter": "^1.0.3",
+    "jest": "^24.9.0",
     "lint-staged": "^9.2.1",
     "prettier": "^1.18.2",
+    "ts-jest": "^24.1.0",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
   },
