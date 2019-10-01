@@ -8,7 +8,7 @@ const path_1 = __importDefault(require("path"));
 const ajv_1 = __importDefault(require("ajv"));
 const ajv_pack_1 = __importDefault(require("ajv-pack"));
 const get_all_files_1 = __importDefault(require("./get-all-files"));
-exports.generateJsonSchemaValidators = (rootSchemaPath, validatorTargetPath) => {
+const generateJsonSchemaValidators = (rootSchemaPath, validatorTargetPath) => {
     // MAKE SURE THE TARGET DIRECTORY EXISTS
     fs_extra_1.default.mkdirSync(validatorTargetPath, { recursive: true });
     return get_all_files_1.default(rootSchemaPath).then(schemaFileInfoList => {
@@ -35,5 +35,5 @@ exports.generateJsonSchemaValidators = (rootSchemaPath, validatorTargetPath) => 
         });
     });
 };
-exports.default = exports.generateJsonSchemaValidators;
+exports.default = generateJsonSchemaValidators;
 //# sourceMappingURL=generate-json-schema-validators.js.map

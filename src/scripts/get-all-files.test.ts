@@ -1,7 +1,8 @@
-import getAllFiles, { ReaddirReturn } from "./get-all-files";
+import { EntryInfo } from "readdirp";
+import getAllFiles from "./get-all-files";
 
 jest.mock("readdirp", () => ({
-  promise(root: string): ReaddirReturn {
+  promise(root: string): Promise<EntryInfo[]> {
     return Promise.resolve([
       {
         path: "./example.json",
