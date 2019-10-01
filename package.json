@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Accepts a directory full of json-schema files and produces associated validators and TypeScript interfaces. Great for validating server side with NodeJS and improving TypeScript client side dev.",
   "main": "dist/api.js",
+  "types": "dist/api.d.ts",
   "files": [
     "dist"
   ],
