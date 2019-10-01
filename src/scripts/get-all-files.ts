@@ -1,8 +1,6 @@
 import { promise } from "readdirp";
 
-export type ReaddirReturn = ReturnType<typeof promise>;
-
-const getAllFiles = (rootPath: string): ReaddirReturn => {
+const getAllFiles = (rootPath: string) => {
   return promise(rootPath);
 };
 
