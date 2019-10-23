@@ -5,14 +5,17 @@ import getAllFiles from "./scripts/get-all-files";
 import generateJsonSchemaValidators from "./scripts/generate-json-schema-validators";
 import normalizeOptions, { Options } from "./scripts/normalize-options";
 import temporaryFolders from "./scripts/temporary-folders";
+import dereference from "./scripts/dereference";
 
 export const main = (options: Options) => {
   const {
     source: SOURCE_JSON_SCHEMA_DIR,
     interfaceTarget: TARGET_TYPESCRIPT_INTERFACE_DIR,
     validatorTarget: TARGET_VALIDATORS_DIR,
-    patterns
+    patterns,
+    dereferencedTarget: TARGET_DEREFERENCE_DIR
   } = normalizeOptions(options);
+
   const {
     temporaryFolder: TEMPORARY_DIR,
     temporarySchemaFolder: TEMPORARY_SCHEMA_DIR
@@ -24,6 +27,7 @@ export const main = (options: Options) => {
     TARGET_TYPESCRIPT_INTERFACE_DIR
   );
   console.log("JSON SCHEMA VALIDATORS LOCATION:", TARGET_VALIDATORS_DIR);
+  console.log("JSON SCHEMA YUP VALIDATORS LOCATION:", TARGET_DEREFERENCE_DIR);
   console.log("REGEX PATTERNS:", patterns);
 
   const REGEX_IS_SCHEMA_FILE = /\.(json)$/i;
@@ -69,7 +73,7 @@ export const main = (options: Options) => {
           return fileInfo.fullPath;
         });
 
-      // ensure the interface directory exists
+      // yupdate schema files
     })
     .then(schemaFileList => {
       schemaFileList.forEach(schemaFilePath => {
@@ -77,6 +81,21 @@ export const main = (options: Options) => {
       });
 
       return schemaFileList;
+
+      // generate dereferenced fiels
+    })
+    .then(schemaFileList => {
+      fs.mkdirSync(TARGET_DEREFERENCE_DIR, { recursive: true });
+
+      return dereference(
+        schemaFileList,
+        TEMPORARY_SCHEMA_DIR,
+        TARGET_DEREFERENCE_DIR
+      ).then(() => {
+        return schemaFileList;
+      });
+
+      // ensure typescrypt target exists
     })
     .then(schemaFileList => {
       fs.mkdirSync(TARGET_TYPESCRIPT_INTERFACE_DIR, { recursive: true });

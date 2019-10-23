@@ -21,11 +21,24 @@ const normalizeOptions = (options) => {
     else {
         validatorTarget = path_1.default.join(source, "..", "json-schema-validators");
     }
+    let dereferencedTarget;
+    if (options.dereferencedTarget) {
+        dereferencedTarget = path_1.default.resolve(process_1.default.cwd(), options.dereferencedTarget);
+    }
+    else {
+        dereferencedTarget = path_1.default.join(source, "..", "json-schema-dereferenced");
+    }
     let patterns = {};
     if (options.patterns) {
         patterns = require(path_1.default.resolve(process_1.default.cwd(), options.patterns));
     }
-    return { source, interfaceTarget, validatorTarget, patterns };
+    return {
+        source,
+        interfaceTarget,
+        validatorTarget,
+        dereferencedTarget,
+        patterns
+    };
 };
 exports.default = normalizeOptions;
 //# sourceMappingURL=normalize-options.js.map

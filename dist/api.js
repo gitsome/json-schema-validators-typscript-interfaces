@@ -10,12 +10,14 @@ const get_all_files_1 = __importDefault(require("./scripts/get-all-files"));
 const generate_json_schema_validators_1 = __importDefault(require("./scripts/generate-json-schema-validators"));
 const normalize_options_1 = __importDefault(require("./scripts/normalize-options"));
 const temporary_folders_1 = __importDefault(require("./scripts/temporary-folders"));
+const dereference_1 = __importDefault(require("./scripts/dereference"));
 exports.main = (options) => {
-    const { source: SOURCE_JSON_SCHEMA_DIR, interfaceTarget: TARGET_TYPESCRIPT_INTERFACE_DIR, validatorTarget: TARGET_VALIDATORS_DIR, patterns } = normalize_options_1.default(options);
+    const { source: SOURCE_JSON_SCHEMA_DIR, interfaceTarget: TARGET_TYPESCRIPT_INTERFACE_DIR, validatorTarget: TARGET_VALIDATORS_DIR, patterns, dereferencedTarget: TARGET_DEREFERENCE_DIR } = normalize_options_1.default(options);
     const { temporaryFolder: TEMPORARY_DIR, temporarySchemaFolder: TEMPORARY_SCHEMA_DIR } = temporary_folders_1.default();
     console.log("JSON SCHEMA LOCATION:", SOURCE_JSON_SCHEMA_DIR);
     console.log("TYPESCRIPT INTERFACES LOCATION:", TARGET_TYPESCRIPT_INTERFACE_DIR);
     console.log("JSON SCHEMA VALIDATORS LOCATION:", TARGET_VALIDATORS_DIR);
+    console.log("JSON SCHEMA YUP VALIDATORS LOCATION:", TARGET_DEREFERENCE_DIR);
     console.log("REGEX PATTERNS:", patterns);
     const REGEX_IS_SCHEMA_FILE = /\.(json)$/i;
     const REGEX_PATTERN_TEMPLATE = /\$\{\s*PATTERN\s*([^\s]*)\s*\}/g;
@@ -48,13 +50,21 @@ exports.main = (options) => {
             .map(fileInfo => {
             return fileInfo.fullPath;
         });
-        // ensure the interface directory exists
+        // yupdate schema files
     })
         .then(schemaFileList => {
         schemaFileList.forEach(schemaFilePath => {
             updateSchemaFile(schemaFilePath);
         });
         return schemaFileList;
+        // generate dereferenced fiels
+    })
+        .then(schemaFileList => {
+        fs_extra_1.default.mkdirSync(TARGET_DEREFERENCE_DIR, { recursive: true });
+        return dereference_1.default(schemaFileList, TEMPORARY_SCHEMA_DIR, TARGET_DEREFERENCE_DIR).then(() => {
+            return schemaFileList;
+        });
+        // ensure typescrypt target exists
     })
         .then(schemaFileList => {
         fs_extra_1.default.mkdirSync(TARGET_TYPESCRIPT_INTERFACE_DIR, { recursive: true });

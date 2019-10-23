@@ -6,12 +6,14 @@ export interface Options {
   interfaceTarget?: string;
   validatorTarget?: string;
   patterns?: string;
+  dereferencedTarget?: string;
 }
 
 export interface NormalizedOptions {
   source: string;
   interfaceTarget: string;
   validatorTarget: string;
+  dereferencedTarget?: string;
   patterns: { [key: string]: JSON };
 }
 
@@ -32,12 +34,28 @@ const normalizeOptions = (options: Options): NormalizedOptions => {
     validatorTarget = path.join(source, "..", "json-schema-validators");
   }
 
+  let dereferencedTarget;
+  if (options.dereferencedTarget) {
+    dereferencedTarget = path.resolve(
+      process.cwd(),
+      options.dereferencedTarget
+    );
+  } else {
+    dereferencedTarget = path.join(source, "..", "json-schema-dereferenced");
+  }
+
   let patterns = {};
   if (options.patterns) {
     patterns = require(path.resolve(process.cwd(), options.patterns));
   }
 
-  return { source, interfaceTarget, validatorTarget, patterns };
+  return {
+    source,
+    interfaceTarget,
+    validatorTarget,
+    dereferencedTarget,
+    patterns
+  };
 };
 
 export default normalizeOptions;

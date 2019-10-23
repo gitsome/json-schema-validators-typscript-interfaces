@@ -18,7 +18,7 @@ jest.mock("readdirp", () => ({
         return Promise.resolve([
             {
                 path: "./example.json",
-                fullPath: "/test/example.json",
+                fullPath: `${root}/example.json`,
                 basename: "example.json"
             }
         ]);

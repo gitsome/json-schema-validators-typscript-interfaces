@@ -17,6 +17,12 @@ const commandLineArgs = yargs
   .string("patterns")
   .alias("p", "patterns")
   .describe("p", "the location of a regex patterns module (optional)")
+  .boolean("yup")
+  .describe("yup", "generate yup validators from json schema")
+  .string("yup-target")
+  .alias("y", "yupTarget")
+  .alias("validatorTarget", "yup-target")
+  .describe("y", "the output location for yup validators")
   .demandOption(["source"], "The source (s) parameter is required.")
   .help("help").argv;
 
