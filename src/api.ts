@@ -31,7 +31,7 @@ export const main = (options: Options) => {
   console.log("REGEX PATTERNS:", patterns);
 
   const REGEX_IS_SCHEMA_FILE = /\.(json)$/i;
-  const REGEX_PATTERN_TEMPLATE = /\$\{\s*PATTERN\s+([^\s}]*)\s*\}/g;
+  const REGEX_PATTERN_TEMPLATE = /\$\{\s*PATTERN\s+([^\s"}]*)\s*\}/g;
 
   const updateSchemaFile = (filePath: string) => {
     // read the file synchronously
