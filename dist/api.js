@@ -20,7 +20,7 @@ exports.main = (options) => {
     console.log("JSON SCHEMA YUP VALIDATORS LOCATION:", TARGET_DEREFERENCE_DIR);
     console.log("REGEX PATTERNS:", patterns);
     const REGEX_IS_SCHEMA_FILE = /\.(json)$/i;
-    const REGEX_PATTERN_TEMPLATE = /\$\{\s*PATTERN\s*([^\s]*)\s*\}/g;
+    const REGEX_PATTERN_TEMPLATE = /\$\{\s*PATTERN\s*([^\s}"]*)\s*\}/g;
     const updateSchemaFile = (filePath) => {
         // read the file synchronously
         const rawFile = fs_extra_1.default.readFileSync(filePath, "utf8");
