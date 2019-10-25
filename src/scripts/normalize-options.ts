@@ -13,7 +13,7 @@ export interface NormalizedOptions {
   source: string;
   interfaceTarget: string;
   validatorTarget: string;
-  dereferencedTarget?: string;
+  dereferencedTarget: string;
   patterns: { [key: string]: JSON };
 }
 
