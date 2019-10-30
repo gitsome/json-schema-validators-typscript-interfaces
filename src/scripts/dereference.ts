@@ -33,7 +33,7 @@ export default (
     });
   });
 
-  return Promise.all(schemaPromises).catch((e: any) => {
+  return Promise.all(schemaPromises).catch((e: Error) => {
     console.log("e:", e);
   });
 };

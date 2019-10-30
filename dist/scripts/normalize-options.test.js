@@ -15,7 +15,8 @@ describe("options normalization", () => {
             interfaceTarget: "/test/json-schema-interfaces",
             patterns: {},
             source: "/test/schemas-folder",
-            validatorTarget: "/test/json-schema-validators"
+            validatorTarget: "/test/json-schema-validators",
+            dereferencedTarget: "/test/json-schema-dereferenced"
         });
     });
     it("should handle interface target", () => {
@@ -26,7 +27,8 @@ describe("options normalization", () => {
             interfaceTarget: "/test/custom-interface-folder",
             patterns: {},
             source: "/test/schemas-folder",
-            validatorTarget: "/test/json-schema-validators"
+            validatorTarget: "/test/json-schema-validators",
+            dereferencedTarget: "/test/json-schema-dereferenced"
         });
     });
     it("should handle validator target", () => {
@@ -37,7 +39,8 @@ describe("options normalization", () => {
             interfaceTarget: "/test/json-schema-interfaces",
             patterns: {},
             source: "/test/schemas-folder",
-            validatorTarget: "/test/custom-validator-folder"
+            validatorTarget: "/test/custom-validator-folder",
+            dereferencedTarget: "/test/json-schema-dereferenced"
         });
     });
     it("should handle patterns", () => {

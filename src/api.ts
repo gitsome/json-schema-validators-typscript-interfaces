@@ -7,6 +7,13 @@ import normalizeOptions, { Options } from "./scripts/normalize-options";
 import temporaryFolders from "./scripts/temporary-folders";
 import dereference from "./scripts/dereference";
 
+/**
+ * Takes directory full of json schema documents
+ * and spit out associated validators and TypeScript interfaces.
+ *
+ * @param options configuration for folders used
+ * @returns true for successful processing, false for failed processing
+ */
 export const main = (options: Options) => {
   const {
     source: SOURCE_JSON_SCHEMA_DIR,
@@ -63,7 +70,7 @@ export const main = (options: Options) => {
   fs.copySync(SOURCE_JSON_SCHEMA_DIR, TEMPORARY_SCHEMA_DIR);
 
   // replace all ${PATTERN <pattern name>} with the proper regex
-  getAllFiles(TEMPORARY_SCHEMA_DIR)
+  return getAllFiles(TEMPORARY_SCHEMA_DIR)
     .then(fileInfoList => {
       return fileInfoList
         .filter(fileInfo => {
@@ -73,7 +80,7 @@ export const main = (options: Options) => {
           return fileInfo.fullPath;
         });
 
-      // yupdate schema files
+      // update schema files
     })
     .then(schemaFileList => {
       schemaFileList.forEach(schemaFilePath => {
@@ -82,7 +89,7 @@ export const main = (options: Options) => {
 
       return schemaFileList;
 
-      // generate dereferenced fiels
+      // generate dereferenced fields
     })
     .then(schemaFileList => {
       fs.mkdirSync(TARGET_DEREFERENCE_DIR, { recursive: true });
@@ -95,7 +102,7 @@ export const main = (options: Options) => {
         return schemaFileList;
       });
 
-      // ensure typescrypt target exists
+      // ensure typescript target exists
     })
     .then(schemaFileList => {
       fs.mkdirSync(TARGET_TYPESCRIPT_INTERFACE_DIR, { recursive: true });
@@ -141,8 +148,10 @@ export const main = (options: Options) => {
     })
     .then(() => {
       console.log("compile-json-schema.success");
+      return true;
     })
     .catch(err => {
       console.error("compile-json-schema.error:", err);
+      return false;
     });
 };

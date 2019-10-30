@@ -29,15 +29,15 @@
     "fs-extra": "^8.1.0",
     "json-schema-ref-parser": "^7.1.1",
     "json-schema-to-typescript": "^7.1.0",
-    "readdirp": "^3.1.2",
+    "readdirp": "^3.2.0",
     "schema-to-yup": "^1.9.9",
     "yargs": "^14.0.0"
   },
   "devDependencies": {
     "@types/ajv-pack": "^0.3.0",
-    "@types/fs-extra": "^8.0.0",
-    "@types/jest": "^24.0.18",
-    "@types/yargs": "^13.0.2",
+    "@types/fs-extra": "^8.0.1",
+    "@types/jest": "^24.0.21",
+    "@types/yargs": "^13.0.3",
     "@typescript-eslint/eslint-plugin": "^2.3.0",
     "@typescript-eslint/parser": "^2.1.0",
     "eslint": "^6.4.0",
@@ -50,8 +50,8 @@
     "lint-staged": "^9.2.1",
     "prettier": "^1.18.2",
     "ts-jest": "^24.1.0",
-    "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
   },
   "resolutions": {
     "ajv": "^6.10.2"

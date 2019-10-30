@@ -11,6 +11,13 @@ const generate_json_schema_validators_1 = __importDefault(require("./scripts/gen
 const normalize_options_1 = __importDefault(require("./scripts/normalize-options"));
 const temporary_folders_1 = __importDefault(require("./scripts/temporary-folders"));
 const dereference_1 = __importDefault(require("./scripts/dereference"));
+/**
+ * Takes directory full of json schema documents
+ * and spit out associated validators and TypeScript interfaces.
+ *
+ * @param options configuration for folders used
+ * @returns true for successful processing, false for failed processing
+ */
 exports.main = (options) => {
     const { source: SOURCE_JSON_SCHEMA_DIR, interfaceTarget: TARGET_TYPESCRIPT_INTERFACE_DIR, validatorTarget: TARGET_VALIDATORS_DIR, patterns, dereferencedTarget: TARGET_DEREFERENCE_DIR } = normalize_options_1.default(options);
     const { temporaryFolder: TEMPORARY_DIR, temporarySchemaFolder: TEMPORARY_SCHEMA_DIR } = temporary_folders_1.default();
@@ -41,7 +48,7 @@ exports.main = (options) => {
     // first copy all json schema files
     fs_extra_1.default.copySync(SOURCE_JSON_SCHEMA_DIR, TEMPORARY_SCHEMA_DIR);
     // replace all ${PATTERN <pattern name>} with the proper regex
-    get_all_files_1.default(TEMPORARY_SCHEMA_DIR)
+    return get_all_files_1.default(TEMPORARY_SCHEMA_DIR)
         .then(fileInfoList => {
         return fileInfoList
             .filter(fileInfo => {
@@ -50,21 +57,21 @@ exports.main = (options) => {
             .map(fileInfo => {
             return fileInfo.fullPath;
         });
-        // yupdate schema files
+        // update schema files
     })
         .then(schemaFileList => {
         schemaFileList.forEach(schemaFilePath => {
             updateSchemaFile(schemaFilePath);
         });
         return schemaFileList;
-        // generate dereferenced fiels
+        // generate dereferenced fields
     })
         .then(schemaFileList => {
         fs_extra_1.default.mkdirSync(TARGET_DEREFERENCE_DIR, { recursive: true });
         return dereference_1.default(schemaFileList, TEMPORARY_SCHEMA_DIR, TARGET_DEREFERENCE_DIR).then(() => {
             return schemaFileList;
         });
-        // ensure typescrypt target exists
+        // ensure typescript target exists
     })
         .then(schemaFileList => {
         fs_extra_1.default.mkdirSync(TARGET_TYPESCRIPT_INTERFACE_DIR, { recursive: true });
@@ -96,9 +103,11 @@ exports.main = (options) => {
     })
         .then(() => {
         console.log("compile-json-schema.success");
+        return true;
     })
         .catch(err => {
         console.error("compile-json-schema.error:", err);
+        return false;
     });
 };
 //# sourceMappingURL=api.js.map
