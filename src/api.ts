@@ -14,7 +14,7 @@ import dereference from "./scripts/dereference";
  * @param options configuration for folders used
  * @returns true for successful processing, false for failed processing
  */
-export const main = (options: Options) => {
+export const main = async (options: Options) => {
   const {
     source: SOURCE_JSON_SCHEMA_DIR,
     interfaceTarget: TARGET_TYPESCRIPT_INTERFACE_DIR,
@@ -70,88 +70,54 @@ export const main = (options: Options) => {
   fs.copySync(SOURCE_JSON_SCHEMA_DIR, TEMPORARY_SCHEMA_DIR);
 
   // replace all ${PATTERN <pattern name>} with the proper regex
-  return getAllFiles(TEMPORARY_SCHEMA_DIR)
-    .then(fileInfoList => {
-      return fileInfoList
-        .filter(fileInfo => {
-          return fileInfo.fullPath.match(REGEX_IS_SCHEMA_FILE);
-        })
-        .map(fileInfo => {
-          return fileInfo.fullPath;
-        });
-
-      // update schema files
-    })
-    .then(schemaFileList => {
-      schemaFileList.forEach(schemaFilePath => {
-        updateSchemaFile(schemaFilePath);
+  try {
+    const fileInfoList = await getAllFiles(TEMPORARY_SCHEMA_DIR);
+    const schemaFileList = fileInfoList
+      .filter(fileInfo => {
+        return fileInfo.fullPath.match(REGEX_IS_SCHEMA_FILE);
+      })
+      .map(fileInfo => {
+        return fileInfo.fullPath;
       });
-
-      return schemaFileList;
-
-      // generate dereferenced fields
-    })
-    .then(schemaFileList => {
-      fs.mkdirSync(TARGET_DEREFERENCE_DIR, { recursive: true });
-
-      return dereference(
-        schemaFileList,
-        TEMPORARY_SCHEMA_DIR,
-        TARGET_DEREFERENCE_DIR
-      ).then(() => {
-        return schemaFileList;
-      });
-
-      // ensure typescript target exists
-    })
-    .then(schemaFileList => {
-      fs.mkdirSync(TARGET_TYPESCRIPT_INTERFACE_DIR, { recursive: true });
-
-      return schemaFileList;
-
-      // run typescript to json schema
-    })
-    .then(schemaFileList => {
-      const allSchemaPromises = schemaFileList.map(schemaFilePath => {
-        const schemaPromise = compileFromFile(schemaFilePath, {}).then(ts => {
-          const relativeTypeScriptFilePath = path
-            .relative(TEMPORARY_SCHEMA_DIR, schemaFilePath)
-            .replace(/.json$/, ".ts");
-          const targetTypeScriptFilePath = path.resolve(
-            TARGET_TYPESCRIPT_INTERFACE_DIR,
-            relativeTypeScriptFilePath
-          );
-          const targetTypeScriptFileFolderPath = path.dirname(
-            targetTypeScriptFilePath
-          );
-
-          // ensure the path exists
-          fs.mkdirSync(targetTypeScriptFileFolderPath, { recursive: true });
-
-          return fs.writeFileSync(targetTypeScriptFilePath, ts);
-        });
-
-        return schemaPromise;
-      });
-
-      return Promise.all(allSchemaPromises);
-    })
-    .then(() => {
-      return generateJsonSchemaValidators(
-        TEMPORARY_SCHEMA_DIR,
-        TARGET_VALIDATORS_DIR
-      );
-    })
-    .then(() => {
-      // finally delete the temp directory
-      fs.removeSync(TEMPORARY_DIR);
-    })
-    .then(() => {
-      console.log("compile-json-schema.success");
-      return true;
-    })
-    .catch(err => {
-      console.error("compile-json-schema.error:", err);
-      return false;
+    schemaFileList.forEach(schemaFilePath => {
+      updateSchemaFile(schemaFilePath);
     });
+    fs.mkdirSync(TARGET_DEREFERENCE_DIR, { recursive: true });
+    await dereference(
+      schemaFileList,
+      TEMPORARY_SCHEMA_DIR,
+      TARGET_DEREFERENCE_DIR
+    );
+    fs.mkdirSync(TARGET_TYPESCRIPT_INTERFACE_DIR, { recursive: true });
+    const allSchemaPromises = schemaFileList.map(schemaFilePath => {
+      const schemaPromise = compileFromFile(schemaFilePath, {}).then(ts => {
+        const relativeTypeScriptFilePath = path
+          .relative(TEMPORARY_SCHEMA_DIR, schemaFilePath)
+          .replace(/.json$/, ".ts");
+        const targetTypeScriptFilePath = path.resolve(
+          TARGET_TYPESCRIPT_INTERFACE_DIR,
+          relativeTypeScriptFilePath
+        );
+        const targetTypeScriptFileFolderPath = path.dirname(
+          targetTypeScriptFilePath
+        );
+        // ensure the path exists
+        fs.mkdirSync(targetTypeScriptFileFolderPath, { recursive: true });
+        return fs.writeFileSync(targetTypeScriptFilePath, ts);
+      });
+      return schemaPromise;
+    });
+    await Promise.all(allSchemaPromises);
+    await generateJsonSchemaValidators(
+      TEMPORARY_SCHEMA_DIR,
+      TARGET_VALIDATORS_DIR
+    );
+    // finally delete the temp directory
+    fs.removeSync(TEMPORARY_DIR);
+    console.log("compile-json-schema.success");
+    return true;
+  } catch (err) {
+    console.error("compile-json-schema.error:", err);
+    return false;
+  }
 };
