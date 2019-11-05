@@ -16,7 +16,12 @@ const normalizeOptions = (options) => {
     }
     let validatorTarget;
     if (options.validatorTarget) {
-        validatorTarget = path_1.default.resolve(process_1.default.cwd(), options.validatorTarget);
+        if (options.validatorTarget === "null") {
+            validatorTarget = "null";
+        }
+        else {
+            validatorTarget = path_1.default.resolve(process_1.default.cwd(), options.validatorTarget);
+        }
     }
     else {
         validatorTarget = path_1.default.join(source, "..", "json-schema-validators");

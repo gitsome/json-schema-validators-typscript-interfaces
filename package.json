@@ -1,6 +1,6 @@
 {
   "name": "json-schema-validators-typescript-interfaces",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "description": "Accepts a directory full of json-schema files and produces associated validators, TypeScript interfaces, and optional Yup validators. Great for validating server side with NodeJS and improving TypeScript client side dev.",
   "main": "dist/api.js",
   "files": [
