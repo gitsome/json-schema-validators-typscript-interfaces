@@ -27,11 +27,11 @@ export const main = (options: Options) => {
     TARGET_TYPESCRIPT_INTERFACE_DIR
   );
   console.log("JSON SCHEMA VALIDATORS LOCATION:", TARGET_VALIDATORS_DIR);
-  console.log("JSON SCHEMA YUP VALIDATORS LOCATION:", TARGET_DEREFERENCE_DIR);
+  console.log("JSON SCHEMA DEREFERENCED LOCATION:", TARGET_DEREFERENCE_DIR);
   console.log("REGEX PATTERNS:", patterns);
 
   const REGEX_IS_SCHEMA_FILE = /\.(json)$/i;
-  const REGEX_PATTERN_TEMPLATE = /\$\{\s*PATTERN\s*([^\s]*)\s*\}/g;
+  const REGEX_PATTERN_TEMPLATE = /\$\{\s*PATTERN\s*([^\s}"]*)\s*\}/g;
 
   const updateSchemaFile = (filePath: string) => {
     // read the file synchronously
@@ -63,7 +63,7 @@ export const main = (options: Options) => {
   fs.copySync(SOURCE_JSON_SCHEMA_DIR, TEMPORARY_SCHEMA_DIR);
 
   // replace all ${PATTERN <pattern name>} with the proper regex
-  getAllFiles(TEMPORARY_SCHEMA_DIR)
+  return getAllFiles(TEMPORARY_SCHEMA_DIR)
     .then(fileInfoList => {
       return fileInfoList
         .filter(fileInfo => {
@@ -130,10 +130,12 @@ export const main = (options: Options) => {
       return Promise.all(allSchemaPromises);
     })
     .then(() => {
-      return generateJsonSchemaValidators(
-        TEMPORARY_SCHEMA_DIR,
-        TARGET_VALIDATORS_DIR
-      );
+      if (TARGET_VALIDATORS_DIR !== "null") {
+        return generateJsonSchemaValidators(
+          TEMPORARY_SCHEMA_DIR,
+          TARGET_VALIDATORS_DIR
+        );
+      }
     })
     .then(() => {
       // finally delete the temp directory

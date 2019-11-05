@@ -13,7 +13,7 @@ export interface NormalizedOptions {
   source: string;
   interfaceTarget: string;
   validatorTarget: string;
-  dereferencedTarget?: string;
+  dereferencedTarget: string;
   patterns: { [key: string]: JSON };
 }
 
@@ -29,7 +29,11 @@ const normalizeOptions = (options: Options): NormalizedOptions => {
 
   let validatorTarget;
   if (options.validatorTarget) {
-    validatorTarget = path.resolve(process.cwd(), options.validatorTarget);
+    if (options.validatorTarget === "null") {
+      validatorTarget = "null";
+    } else {
+      validatorTarget = path.resolve(process.cwd(), options.validatorTarget);
+    }
   } else {
     validatorTarget = path.join(source, "..", "json-schema-validators");
   }
